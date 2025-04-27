@@ -7,8 +7,8 @@
 <div align="center">
   <a href="https://www.dain-sol.xyz/" target="_blank" rel="noopener">
     <picture>
-      <source media="(prefers-color-scheme: dark)" alt="Decentralized AI Nexus" srcset="https://user-images.githubusercontent.com/29084184/204598632-23c473db-92ee-4e9b-9b57-d6d95c861fdf.png" />
-      <img alt="DAIN" width="224" src="https://user-images.githubusercontent.com/29084184/204598632-23c473db-92ee-4e9b-9b57-d6d95c861fdf.png" />
+      <source media="(prefers-color-scheme: dark)" alt="Decentralized AI Nexus" srcset="20250427114423.jpg" />
+      <img alt="DAIN" width="224" src="20250427114423.jpg" />
     </picture>
   </a>
   <div>&nbsp;</div>
