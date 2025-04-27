@@ -1,7 +1,5 @@
 # Decentralized-AI-Nexus
-<div>
-  <h1> Decentralized AI Nexus </h1>
-</div>
+
 
 
 
