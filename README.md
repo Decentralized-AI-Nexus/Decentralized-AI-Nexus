@@ -29,9 +29,7 @@
   <p>Decentralized AI Nexus</p>
 </div>
 
->  <b>DAIN</b> is an AI-oriented automated quantitative investment platform, which aims to realize the potential,
-> empower AI technologies in quantitative investment. DAIN supports diverse machine learning modeling paradigms.
-> including supervised learning, market dynamics modeling, and RL.
+>  <b>DAIN</b> is A blockchain-AI platform enabling secure, decentralized data collaboration and verifiable model training through federated learning and ZKP encryption.  
 
 
 
