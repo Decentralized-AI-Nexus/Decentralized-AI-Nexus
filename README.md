@@ -56,8 +56,8 @@ By leveraging federated learning and zero-knowledge proofs (ZKP),
 DAIN enables secure cross-institutional collaboration without exposing raw data.
 Its hybrid architecture combines IPFS decentralized storage, a Proof-of-Resource-Allocation (PoRA) consensus,
 and encrypted data sandboxes using TEE technology. The ecosystem features a tokenized data marketplace where datasets
-are traded as NFTs, while AI models with on-chain "DNA fingerprints" ensure transparent provenance tracking. DAIN's
-three-token system ($DAIN, $FUEL, $CREDIT) incentivizes data sharing, computational resource allocation, and model development.
+are traded as NFTs, while AI models with on-chain "DNA fingerprints" ensure transparent provenance tracking. DAIN's 
+token system incentivizes data sharing, computational resource allocation, and model development.
 Initial applications focus on healthcare (multi-hospital research with GDPR compliance) and fintech (collaborative fraud detection),
 with built-in regulatory tools for automated compliance auditing.
 
