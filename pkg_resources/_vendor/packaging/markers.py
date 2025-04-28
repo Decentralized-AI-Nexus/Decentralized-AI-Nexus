@@ -177,7 +177,32 @@ def _coerce_parse_result(results):
         return [_coerce_parse_result(i) for i in results]
     else:
         return results
+ def v_netvalue(self, end=yesterdayobj(), vopts=None, rendered=True):
+        """
+       If the starting point is aligned and normalized, the net value of each reference fund or index is compared and visualized
 
+        :param end: string or object of date, the end date of the line
+        :param vkwds: pyechart line.add() options
+        :param vopts: dict, options for pyecharts instead of builtin settings
+        :returns: pyecharts.charts.Line.render_notebook()
+        """
+        partprice = self.totprice[self.totprice["date"] <= end]
+
+        line = Line()
+        if vopts is None:
+            vopts = line_opts
+        line.set_global_opts(**vopts)
+        line.add_xaxis([d.date() for d in list(partprice.date)])
+        for fund in self.fundobjs:
+            line.add_yaxis(
+                series_name=fund.name,
+                y_axis=list(partprice[fund.code]),
+                is_symbol_show=False,
+            )
+        if rendered:
+            return line.render_notebook()
+        else:
+            return line
 
 def _format_marker(marker, first=True):
     # type: (Union[List[str], Tuple[Node, ...], str], Optional[bool]) -> str
