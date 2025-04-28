@@ -142,7 +142,35 @@ MARKER_EXPR << MARKER_ATOM + ZeroOrMore(BOOLOP + MARKER_EXPR)
 
 MARKER = stringStart + MARKER_EXPR + stringEnd
 
+    def __init__(self, *fundobjs, start=None):
+        self.fundobjs = fundobjs
+        self.totprice = (
+            self.fundobjs[0]
+            .price[["date", "netvalue"]]
+            .rename(columns={"netvalue": fundobjs[0].code})
+        )
+        for fundobj in fundobjs[1:]:
+            self.totprice = self.totprice.merge(
+                fundobj.price[["date", "netvalue"]].rename(
+                    columns={"netvalue": fundobj.code}
+                ),
+                on="date",
+            )
 
+        startdate = self.totprice.iloc[0].date
+        if start is None:
+            self.start = startdate
+        else:
+            start = convert_date(start)
+            if start < startdate:
+                raise Exception("Too early start date")
+            else:
+                self.start = start
+                self.totprice = self.totprice[self.totprice["date"] >= self.start]
+        self.totprice = self.totprice.reset_index(drop=True)
+        for col in self.totprice.columns:
+            if col != "date":
+                self.totprice[col] = self.totprice[col] / self.totprice[col].iloc[0]
 def _coerce_parse_result(results):
     # type: (Union[ParseResults, List[Any]]) -> List[Any]
     if isinstance(results, ParseResults):
