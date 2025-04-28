@@ -23,7 +23,41 @@ class MyStrategy(bt.Strategy):
         self.crossover = bt.indicators.CrossOver(
             self.fast_moving_average, self.slow_moving_average
         )
+    def correlation_table(self, end=yesterdayobj()):
+        """
+        give the correlation coefficient amongst referenced funds and indexes
 
+        :param end: string or object of date, the end date of the line
+        :returns: pandas DataFrame, with correlation coefficient as elements
+        """
+        partprice = self.totprice[self.totprice["date"] <= end]
+        covtable = partprice.iloc[:, 1:].pct_change().corr()
+        return covtable
+
+    def v_correlation(self, end=yesterdayobj(), vopts=None, rendered=True):
+        """
+       Visualization of the correlation of the net value of each fund
+
+        :param end: string or object of date, the end date of the line
+        :returns: pyecharts.charts.Heatmap.render_notebook object
+        """
+        ctable = self.correlation_table(end)
+        x_axis = list(ctable.columns)
+        data = [
+            [i, j, ctable.iloc[i, j]]
+            for i in range(len(ctable))
+            for j in range(len(ctable))
+        ]
+        heatmap = HeatMap()
+        heatmap.add_xaxis(x_axis)
+        heatmap.add_yaxis(series_name="correlation", yaxis_data=x_axis, value=data)
+        if vopts is None:
+            vopts = heatmap_opts
+        heatmap.set_global_opts(**vopts)
+        if rendered:
+            return heatmap.render_notebook()
+        else:
+            return heatmap
     def next(self):
         if not self.position:
             if self.crossover > 0:
