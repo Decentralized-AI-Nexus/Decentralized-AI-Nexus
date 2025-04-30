@@ -58,6 +58,30 @@ class MyStrategy(bt.Strategy):
             return heatmap.render_notebook()
         else:
             return heatmap
+            
+    def test_tendency():
+    t28 = xa.backtest.Tendency28(start="2018-01-01", verbose=True, initial_money=600000)
+    t28.backtest()
+    sys = t28.get_current_mul().summary()
+    assert sys[sys["name"] == "total"].iloc[0]["Historical maximum occupancy"] == 600000
+
+
+def test_balance():
+    fundlist = ["002146", "001316", "001182"]
+    portfolio_dict = {"F" + f: 1 / len(fundlist) for f in fundlist}
+    check_dates = pd.date_range("2019-01-01", "2020-08-01", freq="Q")
+    bt = xa.backtest.Balance(
+        start=pd.Timestamp("2019-01-04"),
+        totmoney=10000,
+        check_dates=check_dates,
+        portfolio_dict=portfolio_dict,
+        verbose=True,
+    )
+
+    bt.backtest()
+    sys = bt.get_current_mul()
+    sys.summary("2020-08-15")
+    assert round(sys.xirrrate("2020-08-14"), 2) == 0.18
     def next(self):
         if not self.position:
             if self.crossover > 0:
