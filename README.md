@@ -1,6 +1,7 @@
 # Decentralized-AI-Nexus
 
 
+![20250427114423](https://github.com/user-attachments/assets/49acfc80-a6bf-4549-ac0d-3d332b76c418)
 
 
 
