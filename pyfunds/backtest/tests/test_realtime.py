@@ -12,7 +12,37 @@ def test_rfundinfo():
     gf.info()
     assert gf.code == "001469"
 
+def amberdata_ohlcv(exchange, symbol, startDate, endDate):
+    format = "%Y-%m-%dT%H:%M:%S"
+    startTimestamp = datetime.strptime(startDate, "%Y-%m-%d")
+    endTimestamp = datetime.strptime(endDate, "%Y-%m-%d")
 
+    current = startTimestamp
+    next = current
+    fields = "timestamp,open,high,low,close,volume"
+    payload = fields
+    while current < endTimestamp:
+        next += relativedelta(years=1)
+        if next > endTimestamp:
+            next = endTimestamp
+        print("Retrieving OHLCV between", current, " and ", next)
+        result = amberdata(
+            "https://web3api.io/api/v2/market/ohlcv/" + symbol + "/historical",
+            {
+                "exchange": exchange,
+                "timeInterval": "days",
+                "timeFormat": "iso",
+                "format": "raw_csv",
+                "fields": fields,
+                "startDate": current.strftime(format),
+                "endDate": next.strftime(format),
+            },
+            Amberdata_API_KEY,
+        )
+        payload += "\n" + result
+        current = next
+
+    return payload
 def test_review(capsys):
     st1 = xa.policy.buyandhold(gf, start="2018-08-10", end="2019-01-01")
     st2 = xa.policy.scheduled_tune(
