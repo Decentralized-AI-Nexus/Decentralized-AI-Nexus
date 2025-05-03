@@ -85,6 +85,64 @@ def amberdata_ohlcv(exchange, symbol, startDate, endDate):
 
     return payload
 
+def xirrcal(cftable, trades, date, startdate=None, guess=0.01):
+    """
+    calculate the xirr rate
+
+    :param cftable: cftable (pd.Dateframe) with date and cash column
+    :param trades: list [trade1, ...], every item is an trade object,
+        whose shares would be sold out virtually
+    :param date: string of date or datetime object,
+        the date when virtually all holding positions being sold
+    :param guess: floating number, a guess at the xirr rate solution to be used
+        as a starting point for the numerical solution
+    :returns: the IRR as a single floating number
+    """
+    date = convert_date(date)
+    partcftb = cftable[cftable["date"] <= date]
+    if len(partcftb) == 0:
+        return 0
+    if not startdate:
+        cashflow = [(row["date"], row["cash"]) for i, row in partcftb.iterrows()]
+    else:
+        if not isinstance(startdate, dt.datetime):
+            startdate = dt.datetime.strptime(
+                startdate.replace("-", "").replace("/", ""), "%Y%m%d"
+            )
+        start_cash = 0
+        for fund in trades:
+            start_cash += fund.briefdailyreport(startdate).get("currentvalue", 0)
+        cashflow = [(startdate, -start_cash)]
+        partcftb = partcftb[partcftb["date"] > startdate]
+        cashflow.extend([(row["date"], row["cash"]) for i, row in partcftb.iterrows()])
+    rede = 0
+    for fund in trades:
+        if not isinstance(fund, itrade):
+            partremtb = fund.remtable[fund.remtable["date"] <= date]
+            if len(partremtb) > 0:
+                rem = partremtb.iloc[-1]["rem"]
+            else:
+                rem = []
+            rede += fund.aim.shuhui(
+                fund.briefdailyreport(date).get("currentshare", 0), date, rem
+            )[1]
+        else:  
+            rede += fund.briefdailyreport(date).get("currentvalue", 0)
+    cashflow.append((date, rede))
+    return xirr(cashflow, guess)
+
+
+def bottleneck(cftable):
+    """
+    find the max total input in the history given cftable with cash column
+
+    :param cftable: pd.DataFrame of cftable
+    """
+    if len(cftable) == 0:
+        return 0
+    # cftable = cftable.reset_index(drop=True) # unnecessary as iloc use natural rows instead of default index
+    inputl = [-sum(cftable.iloc[:i].cash) for i in range(1, len(cftable) + 1)]
+    return myround(max(inputl))
 
 
 def amberdata_stf(symbol, startDate, endDate):
