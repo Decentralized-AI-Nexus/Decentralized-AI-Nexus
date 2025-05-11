@@ -1,12 +1,4 @@
 """
-Author: Charmve yidazhang1@gmail.com
-Date: 2023-05-20 16:37:34
-LastEditors: Charmve yidazhang1@gmail.com
-LastEditTime: 2023-09-20 10:16:19
-FilePath: /Qbot/gui/panels/panel_backtest.py
-Version: 1.0.1
-Blogs: charmve.blog.csdn.net
-GitHub: https://github.com/Charmve
 Description: 
 
 Copyright (c) 2023 by Charmve, All Rights Reserved. 
