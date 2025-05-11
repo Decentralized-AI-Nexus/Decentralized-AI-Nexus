@@ -85,7 +85,26 @@ class SimTradePanel(wx.Panel):
         self.multi_facts_config = "ROC(20)动量信号周频Top1"
         self.multi_facts_list = list()
         self.init_ui()
+    def __init__(self, parent, id=-1):
+        super(MatplotlibPanel, self).__init__(parent, id)
+        self.TopBoxSizer = wx.BoxSizer(wx.VERTICAL)
+        self.SetSizer(self.TopBoxSizer)
 
+        self.btn_bkt = wx.Button(self, label="", pos=(100, 10))
+
+        self.figure = matplotlib.figure.Figure(figsize=(4, 3))
+        self.figure = plt.figure(figsize=(4, 3))
+        self.canvas = FigureCanvas(self, -1, self.figure)
+        self.TopBoxSizer.Add(
+            self.canvas, proportion=-10, border=2, flag=wx.ALL | wx.EXPAND
+        )
+ def output_earning_rate(self):
+        df = self.bars[-self.days :]
+        df["signals"] = self.signals
+        df["strategy"] = (1 + df.close.pct_change(1).fillna(0) * self.signals).cumprod()
+        df["base"] = df["close"] / df["close"][0]
+        print(df["strategy"].values[-1:])
+        return df
     def init_ui(self):
 
         # 添加参数布局
