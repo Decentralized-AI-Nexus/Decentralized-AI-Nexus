@@ -23,7 +23,7 @@ from qbot.gui.elements.def_dialog import MessageDialog
 from qbot.gui.widgets.widget_web import WebPanel
 
 
-# https://zhuanlan.zhihu.com/p/376248349
+
 def OnBkt(event):
     wx.MessageBox("ok")
 
@@ -37,7 +37,7 @@ class PanelBacktest(wx.Panel):
             "end_time": "20211231",
             "benchmark": "000300.SH",
             "code": "399006.SZ",
-            "select_strategy": "单因子-相对强弱指数RSI",
+            "select_strategy": ,
         }
 
         self.backtest_config = {
@@ -46,34 +46,34 @@ class PanelBacktest(wx.Panel):
             "deal_price": "close",
             "open_cost": 0.0005,
             "slippage": 0.1,
-            "stake": 100,  # 每笔交易量
+            "stake": 100, 
             "commission": 0.0005,
             "stamp_duty": 0.001,
             "close_cost": 0.0015,
             "min_cost": 5,
         }
 
-        # M1 与 M2 横向布局时宽度分割
+        
         self.M1_width = int(displaySize[0] * 0.1)
         self.M2_width = int(displaySize[0] * 0.9)
-        # M1 纵向100%
+        
         self.M1_length = int(displaySize[1])
 
-        # M1中S1 S2 S3 纵向布局高度分割
+        
         self.M1S1_length = int(self.M1_length * 0.2)
         self.M1S2_length = int(self.M1_length * 0.2)
         self.M1S3_length = int(self.M1_length * 0.6)
 
         self.BackWebPanel = WebPanel(self)
 
-        # 第二层布局
-        self.vbox_sizer_b = wx.BoxSizer(wx.VERTICAL)  # 纵向box
+        
+        self.vbox_sizer_b = wx.BoxSizer(wx.VERTICAL)  # 
         self.vbox_sizer_b.Add(
             self._init_para_notebook(),
             proportion=1,
             flag=wx.EXPAND | wx.BOTTOM,
             border=5,
-        )  # 添加行情参数布局
+        )  
         # self.vbox_sizer_b.Add(
         #     self.patten_log_tx, proportion=10, flag=wx.EXPAND | wx.BOTTOM, border=5
         # )
@@ -85,12 +85,12 @@ class PanelBacktest(wx.Panel):
             border=5,
         )
 
-        # 第一层布局
+      
         self.HBoxPanelSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.HBoxPanelSizer.Add(
             self.vbox_sizer_b, proportion=0, border=2, flag=wx.EXPAND | wx.ALL
         )
-        self.SetSizer(self.HBoxPanelSizer)  # 使布局有效
+        self.SetSizer(self.HBoxPanelSizer)  
 
         # self.layout()
 
@@ -122,42 +122,39 @@ class PanelBacktest(wx.Panel):
 
     def _init_para_notebook(self):
 
-        # 创建参数区面板
-        self.ParaNoteb = wx.Notebook(self)
-        self.ParaStPanel = wx.Panel(self.ParaNoteb, -1)  # 行情
-        self.ParaBtPanel = wx.Panel(self.ParaNoteb, -1)  # 回测 back test
-        self.ParaPtPanel = wx.Panel(self.ParaNoteb, -1)  # 条件选股 pick stock
-        self.ParaPaPanel = wx.Panel(self.ParaNoteb, -1)  # 形态选股 patten
 
-        # 第二层布局
+        self.ParaNoteb = wx.Notebook(self)
+        self.ParaStPanel = wx.Panel(self.ParaNoteb, -1) 
+        self.ParaBtPanel = wx.Panel(self.ParaNoteb, -1)  
+        self.ParaPtPanel = wx.Panel(self.ParaNoteb, -1)  
+        self.ParaPaPanel = wx.Panel(self.ParaNoteb, -1)  
+
+      
         self.ParaStPanel.SetSizer(self.add_stock_para_lay(self.ParaStPanel))
         self.ParaBtPanel.SetSizer(self.add_backt_para_lay(self.ParaBtPanel))
-        # self.ParaPtPanel.SetSizer(self.add_pick_para_lay(self.ParaPtPanel))
-        # self.ParaPaPanel.SetSizer(self.add_patten_para_lay(self.ParaPaPanel))
-
+       
         self.ParaNoteb.AddPage(self.ParaStPanel, "行情参数")
         self.ParaNoteb.AddPage(self.ParaBtPanel, "回测参数")
-        # self.ParaNoteb.AddPage(self.ParaPtPanel, "条件选股")
-        # self.ParaNoteb.AddPage(self.ParaPaPanel, "形态选股")
+       
 
         return self.ParaNoteb
 
     def add_stock_para_lay(self, sub_panel):
 
-        # 行情参数
+      
         stock_para_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        # 行情参数——日历控件时间周期
+        
         self.dpc_end_time = wx.adv.DatePickerCtrl(
             sub_panel,
             -1,
             style=wx.adv.DP_DROPDOWN | wx.adv.DP_SHOWCENTURY | wx.adv.DP_ALLOWNONE,
-        )  # 结束时间
+        )  
         self.dpc_start_time = wx.adv.DatePickerCtrl(
             sub_panel,
             -1,
             style=wx.adv.DP_DROPDOWN | wx.adv.DP_SHOWCENTURY | wx.adv.DP_ALLOWNONE,
-        )  # 起始时间
+        )  
 
         self.start_date_box = wx.StaticBox(sub_panel, -1, "开始日期(Start)")
         self.end_date_box = wx.StaticBox(sub_panel, -1, "结束日期(End)")
@@ -192,7 +189,7 @@ class PanelBacktest(wx.Panel):
             self.dpc_start_time.GetValue()
         ).strftime("%Y%m%d")
 
-        # 行情参数——输入股票代码
+       
         self.stock_code_box = wx.StaticBox(sub_panel, -1, "交易标的(股票/期货/比特币)代码")
         self.stock_code_sizer = wx.StaticBoxSizer(self.stock_code_box, wx.VERTICAL)
         self.stock_code_input = wx.TextCtrl(
@@ -210,7 +207,7 @@ class PanelBacktest(wx.Panel):
         logger.debug(f"select_code: {select_code}")
         self.backtest_opts["code"] = select_code
 
-        # 行情参数——股票周期选择
+       
         self.stock_period_box = wx.StaticBox(sub_panel, -1, "股票周期")
         self.stock_period_sizer = wx.StaticBoxSizer(self.stock_period_box, wx.VERTICAL)
         self.stock_period_cbox = wx.ComboBox(
@@ -224,7 +221,7 @@ class PanelBacktest(wx.Panel):
             border=2,
         )
 
-        # 行情参数——股票复权选择
+       
         self.stock_authority_box = wx.StaticBox(sub_panel, -1, "股票复权")
         self.stock_authority_sizer = wx.StaticBoxSizer(
             self.stock_authority_box, wx.VERTICAL
@@ -240,24 +237,12 @@ class PanelBacktest(wx.Panel):
             border=2,
         )
 
-        # 行情参数——多子图显示
+       
         self.pick_graph_box = wx.StaticBox(sub_panel, -1, "多子图显示")
         self.pick_graph_sizer = wx.StaticBoxSizer(self.pick_graph_box, wx.VERTICAL)
         self.pick_graph_cbox = wx.ComboBox(
             sub_panel,
             -1,
-            "未开启",
-            choices=[
-                "未开启",
-                "A股票走势-MPL",
-                "B股票走势-MPL",
-                "C股票走势-MPL",
-                "D股票走势-MPL",
-                "A股票走势-WEB",
-                "B股票走势-WEB",
-                "C股票走势-WEB",
-                "D股票走势-WEB",
-            ],
             style=wx.CB_READONLY | wx.CB_DROPDOWN,
         )
         self.pick_graph_cbox.SetSelection(0)
@@ -279,20 +264,20 @@ class PanelBacktest(wx.Panel):
             "预留A",
             choices=["预留A", "收益率/波动率", "走势叠加分析", "财务指标评分-预留"],
             style=wx.CB_READONLY | wx.CB_DROPDOWN,
-        )  # 策略名称
+        )  
         self.group_analy_sizer.Add(
             self.group_analy_cmbo,
             proportion=0,
             flag=wx.EXPAND | wx.ALL | wx.CENTER,
             border=2,
         )
-        # self.group_analy_cmbo.Bind(wx.EVT_COMBOBOX, self._ev_group_analy)  # 绑定ComboBox事件
+        # self.group_analy_cmbo.Bind(wx.EVT_COMBOBOX, self._ev_group_analy) 
 
-        # 回测按钮
+       
         self.load_data_but = wx.Button(sub_panel, -1, "加载行情数据")
-        self.load_data_but.SetBackgroundColour(wx.Colour(76, 187, 23))  # 设置背景颜色
-        # self.load_data_but.Bind(wx.EVT_BUTTON, self._ev_start_run)  # 绑定按钮事件
-        self.load_data_but.Bind(wx.EVT_BUTTON, self.LoadData)  # 绑定按钮事件
+        self.load_data_but.SetBackgroundColour(wx.Colour(76, 187, 23))  
+        # self.load_data_but.Bind(wx.EVT_BUTTON, self._ev_start_run) 
+        self.load_data_but.Bind(wx.EVT_BUTTON, self.LoadData) 
 
         stock_para_sizer.Add(
             self.start_date_sizer,
@@ -538,9 +523,9 @@ class PanelBacktest(wx.Panel):
 
         return back_para_sizer
 
-    def _ev_enter_stcode(self, event):  # 输入股票代码
+    def _ev_enter_stcode(self, event): 
 
-        # 第一步:收集控件中设置的选项
+        
         st_code = self.stock_code_input.GetValue()
         st_name = self.code_table.get_name(st_code)
         self.backtest_opts["code"] = st_code
@@ -605,7 +590,6 @@ class PanelBacktest(wx.Panel):
         pass
 
     def StartBacktest(self, event):
-        msg = "在线回测属于付费功能，请联系微信：Yida_Zhang2"
         MessageDialog(msg)
         print(msg)
         pass
