@@ -67,6 +67,18 @@ def get_flag(var, fallback, expected=True, warn=True):
         return fallback
     return val == expected
 
+ def show_plt(self):
+        df = self.output_earning_rate()
+        fig, axes = plt.subplots(2, 1, sharex=True, figsize=(18, 12))
+        df[["strategy", "base", "signals"]].plot(
+            ax=axes[0], grid=True, title="收益", figsize=(20, 10)
+        )
+        self.show_score(df, axes[1])
+        plt.show()
+
+    def show_score(self, df, ax):
+        df["score"] = self.get_scores(df)
+        df.score.plot(ax=ax, grid=True, title="score", figsize=(20, 10))
 
 def get_abi_tag():
     """Return the ABI tag based on SOABI (if available) or emulate SOABI
